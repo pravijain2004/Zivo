@@ -4,7 +4,7 @@ import {useEffect} from "react";
 
 function ChatHeader() {
   const {selectedUser,setSelectedUser} = useChatStore();
-
+  
   useEffect(() =>{
     const handleEscKey = (event) => {
         if(event.key === "Escape") setSelectedUser(null);
