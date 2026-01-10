@@ -6,6 +6,7 @@ import cloudinary from "../lib/cloudinary.js";
 import {sendWelcomeEmail} from "../emails/emailHandlers.js"
 
 import "dotenv/config";
+
 export const signup = async(req,res) =>{
  const {fullName,email,password} = req.body
 
@@ -18,9 +19,9 @@ export const signup = async(req,res) =>{
       return res.status(400).json({message:"Password must be at least 6 characters"});
     }
 
-    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-    if(!emailRegex.test(email)){
-      return res.status(400).json({ message:"Invalid email format"});
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: "Invalid email format" });
     }
 
     const user = await User.findOne({email});
@@ -33,7 +34,7 @@ export const signup = async(req,res) =>{
       fullName,
       email,
       password:hashedPassword
-    })
+    });
     
     if(newUser){
       // generateToken(newUser._id,res)
@@ -66,7 +67,11 @@ export const signup = async(req,res) =>{
 
 
 export const login = async (req,res) => {
-  const {email,password} = req.body
+  const {email,password} = req.body;
+
+   if (!email || !password) {
+    return res.status(400).json({ message: "Email and password are required" });
+  }
 
   try {
     const user = await User.findOne({email})
@@ -92,8 +97,8 @@ export const login = async (req,res) => {
 
 
 export const logout = async (_,res) => {
-  res.cookie("jwt","",{maxAge:0})
-  res.status(200).json({message:"Logged out sucessfully"})
+  res.cookie("jwt","",{ maxAge:0 })
+  res.status(200).json({message:"Logged out sucessfully"});
 }
 
 export const updateProfile = async(req,res) =>{
