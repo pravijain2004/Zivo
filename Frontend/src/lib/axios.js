@@ -1,6 +1,6 @@
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-  baseURL:"http://localhost:3000/api",
+  baseURL:"https://zivo-033i.onrender.com",
   withCredentials:true,
 });
